@@ -56,12 +56,15 @@
     function getTextFromURL() {
         const urlParams = new URLSearchParams(window.location.hash.slice(1));
         const text = urlParams.get('text');
+        if (text === '???') {
+            window.location.href = 'translate.html';
+            return '';
+        }
         if (text) {
             try {
                 return atob(text);
             } catch (e) {
                 console.error('Invalid Base64 encoding:', e);
-                window.location.href = 'https://kikunohana-kikukick.github.io/bakagayolo/#text=';
                 return '';
             }
         }
@@ -79,8 +82,8 @@
             span.style.animationDelay = `${index * 0.1}s`;
             container.appendChild(span);
         });
-    } else {
-        window.location.href = 'https://kikunohana-kikukick.github.io/bakagayolo/#text=';
+    } else if (!window.location.href.includes('translate.html')) {
+        container.textContent = 'No text provided.';
     }
 </script>
 
