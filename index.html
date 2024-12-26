@@ -61,6 +61,7 @@
                 return atob(text);
             } catch (e) {
                 console.error('Invalid Base64 encoding:', e);
+                window.location.href = 'https://kikunohana-kikukick.github.io/bakagayolo/#text=';
                 return '';
             }
         }
@@ -79,7 +80,7 @@
             container.appendChild(span);
         });
     } else {
-        container.textContent = 'No text provided.';
+        window.location.href = 'https://kikunohana-kikukick.github.io/bakagayolo/#text=';
     }
 </script>
 
