@@ -29,8 +29,8 @@
             color: #fff;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
             opacity: 0;
-            transform: translateY(100px);
-            animation: fly-in 1s forwards;
+            position: absolute;
+            animation: fly-in 1s forwards, move-random 2s forwards 1s;
         }
 
         @keyframes fly-in {
@@ -44,6 +44,17 @@
             }
             100% {
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes move-random {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(var(--random-x), var(--random-y));
             }
         }
     </style>
@@ -80,6 +91,13 @@
             span.textContent = char;
             span.className = 'char';
             span.style.animationDelay = `${index * 0.1}s`;
+
+            // ランダムな位置を設定
+            const randomX = Math.random() * 200 - 100; // -100 to 100 px
+            const randomY = Math.random() * 200 - 100; // -100 to 100 px
+            span.style.setProperty('--random-x', `${randomX}px`);
+            span.style.setProperty('--random-y', `${randomY}px`);
+
             container.appendChild(span);
         });
     } else if (!window.location.href.includes('translate.html')) {
