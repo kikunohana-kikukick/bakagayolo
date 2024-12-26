@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字アニメーション</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .text-container {
+            display: inline-flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .char {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(100px);
+            animation: fly-in 1s forwards;
+        }
+
+        @keyframes fly-in {
+            0% {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="text-container" id="text"></div>
+
+<script>
+    const text = "面白いアニメーション"; // 表示する文字列
+    const container = document.getElementById('text');
+
+    text.split('').forEach((char, index) => {
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.className = 'char';
+        span.style.animationDelay = `${index * 0.1}s`;
+        container.appendChild(span);
+    });
+</script>
+
+</body>
+</html>
