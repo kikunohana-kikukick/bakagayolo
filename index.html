@@ -79,7 +79,7 @@
             const span = document.createElement('span');
             span.textContent = char;
             span.className = 'char';
-            span.style.animationDelay = ${index * 0.1}s;
+            span.style.animationDelay = `${index * 0.1}s`;  // 修正部分
             container.appendChild(span);
         });
     } else if (!window.location.href.includes('translate.html')) {
@@ -88,4 +88,4 @@
 </script>
 
 </body>
-</html>　　
+</html>
