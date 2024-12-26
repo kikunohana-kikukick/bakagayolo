@@ -11,7 +11,8 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: #000;
+            background: url('your-image.jpg') no-repeat center center;
+            background-size: auto 100vh;
             overflow: hidden;
             font-family: Arial, sans-serif;
         }
@@ -52,64 +53,35 @@
 <div class="text-container" id="text"></div>
 
 <script>
-    function decodeText(encodedText) {
-        try {
-            return decodeURIComponent(atob(encodedText));
-        } catch (e) {
-            return "Invalid text format.";
+    function getTextFromURL() {
+        const urlParams = new URLSearchParams(window.location.hash.slice(1));
+        const text = urlParams.get('text');
+        if (text) {
+            try {
+                return atob(text);
+            } catch (e) {
+                console.error('Invalid Base64 encoding:', e);
+                return '';
+            }
         }
+        return '';
     }
 
-    const url = new URL(window.location.href);
-    const imageLink = url.hash.split("/#")[1] || "";
-    const encodedText = url.hash.split("/#")[2] || "";
-    const text = decodeText(encodedText);
-
-    // Set background image
-    if (imageLink) {
-        document.body.style.background = `url('${imageLink}') no-repeat center center`;
-        document.body.style.backgroundSize = 'auto 100vh';
-    }
-
-    // Display text animation
+    const text = getTextFromURL(); // URL からデコードした文字列を取得
     const container = document.getElementById('text');
-    text.split('').forEach((char, index) => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.className = 'char';
-        span.style.animationDelay = `${index * 0.1}s`;
-        container.appendChild(span);
-    });
+
+    if (text) {
+        text.split('').forEach((char, index) => {
+            const span = document.createElement('span');
+            span.textContent = char;
+            span.className = 'char';
+            span.style.animationDelay = `${index * 0.1}s`;
+            container.appendChild(span);
+        });
+    } else {
+        container.textContent = 'No text provided.';
+    }
 </script>
 
-</body>
-</html>
-
-<!-- 暗号化ツール -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>暗号化ツール</title>
-</head>
-<body>
-    <h1>暗号化ツール</h1>
-    <label for="text-input">暗号化したいテキスト:</label>
-    <input type="text" id="text-input" placeholder="ここに入力してください">
-    <button id="encrypt-btn">暗号化</button>
-    <p id="result"></p>
-
-    <script>
-        function encodeText(inputText) {
-            return btoa(encodeURIComponent(inputText));
-        }
-
-        document.getElementById('encrypt-btn').addEventListener('click', () => {
-            const inputText = document.getElementById('text-input').value;
-            const encoded = encodeText(inputText);
-            document.getElementById('result').textContent = `暗号文: ${encoded}`;
-        });
-    </script>
 </body>
 </html>
