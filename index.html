@@ -11,7 +11,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: url('your-image.jpg') no-repeat center center;
+            background: #000;  /* デフォルト背景色 */
             background-size: auto 100vh;
             overflow: hidden;
             font-family: Arial, sans-serif;
@@ -56,9 +56,14 @@
     function getTextFromURL() {
         const urlParams = new URLSearchParams(window.location.hash.slice(1));
         const text = urlParams.get('text');
+        const bgColor = urlParams.get('bg');  // 新しくbgパラメータを追加
         if (text === '???') {
             window.location.href = 'translate.html';
             return '';
+        }
+        if (bgColor) {
+            // RGB値が指定されている場合、背景色に適用
+            document.body.style.backgroundColor = bgColor;
         }
         if (text) {
             try {
@@ -79,7 +84,7 @@
             const span = document.createElement('span');
             span.textContent = char;
             span.className = 'char';
-            span.style.animationDelay = `${index * 0.1}s`;  // 修正部分
+            span.style.animationDelay = `${index * 0.1}s`;
             container.appendChild(span);
         });
     } else if (!window.location.href.includes('translate.html')) {
