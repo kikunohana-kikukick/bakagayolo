@@ -11,9 +11,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: #000;  /* デフォルト背景色 */
-            background-size: auto 100vh;
-            overflow: hidden;
+            background: #000;
             font-family: Arial, sans-serif;
         }
 
@@ -46,37 +44,44 @@
                 transform: translateY(0);
             }
         }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
 
+<div class="background-image" id="background-image"></div>
 <div class="text-container" id="text"></div>
 
 <script>
     function getTextFromURL() {
         const urlParams = new URLSearchParams(window.location.hash.slice(1));
         const text = urlParams.get('text');
-        const bgColor = urlParams.get('bg');  // 新しくbgパラメータを追加
-        if (text === '???') {
-            window.location.href = 'translate.html';
-            return '';
-        }
+        const bgColor = urlParams.get('bg');
+        const imageUrl = urlParams.get('image'); // 画像URLのパラメータ
+
         if (bgColor) {
-            // RGB値が指定されている場合、背景色に適用
             document.body.style.backgroundColor = bgColor;
         }
-        if (text) {
-            try {
-                return atob(text);
-            } catch (e) {
-                console.error('Invalid Base64 encoding:', e);
-                return '';
-            }
+
+        if (imageUrl) {
+            const backgroundImage = document.getElementById('background-image');
+            backgroundImage.style.backgroundImage = `url(${imageUrl})`;
         }
-        return '';
+
+        return text ? atob(text) : '';
     }
 
-    const text = getTextFromURL(); // URL からデコードした文字列を取得
+    const text = getTextFromURL();
     const container = document.getElementById('text');
 
     if (text) {
@@ -87,7 +92,7 @@
             span.style.animationDelay = `${index * 0.1}s`;
             container.appendChild(span);
         });
-    } else if (!window.location.href.includes('translate.html')) {
+    } else {
         container.textContent = 'No text provided.';
     }
 </script>
