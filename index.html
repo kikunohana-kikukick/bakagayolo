@@ -11,7 +11,8 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #222;
+            background: url('<dynamic-image-url>') no-repeat center center;
+            background-size: auto 100vh;
             overflow: hidden;
             font-family: Arial, sans-serif;
         }
@@ -26,6 +27,7 @@
             font-size: 3rem;
             font-weight: bold;
             color: #fff;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
             opacity: 0;
             transform: translateY(100px);
             animation: fly-in 1s forwards;
@@ -51,16 +53,35 @@
 <div class="text-container" id="text"></div>
 
 <script>
-    const text = "面白いアニメーション"; // 表示する文字列
+    const urlParams = new URLSearchParams(window.location.hash.substring(1));
+    const language = urlParams.get('text'); // jp or en
+    const encodedText = urlParams.get('message'); // Encoded string
+
+    let text = '';
+
+    if (language === 'jp') {
+        text = decodeURIComponent(escape(window.atob(encodedText)));
+    } else if (language === 'en') {
+        text = decodeURIComponent(encodedText);
+    }
+
     const container = document.getElementById('text');
 
-    text.split('').forEach((char, index) => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.className = 'char';
-        span.style.animationDelay = `${index * 0.1}s`;
-        container.appendChild(span);
-    });
+    if (text) {
+        text.split('').forEach((char, index) => {
+            const span = document.createElement('span');
+            span.textContent = char;
+            span.className = 'char';
+            span.style.animationDelay = `${index * 0.1}s`;
+            container.appendChild(span);
+        });
+    } else {
+        const errorMessage = document.createElement('div');
+        errorMessage.textContent = "Invalid or missing text in URL.";
+        errorMessage.style.color = '#fff';
+        errorMessage.style.textAlign = 'center';
+        container.appendChild(errorMessage);
+    }
 </script>
 
 </body>
